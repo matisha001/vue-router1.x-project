@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_router-view</title>
+  <script src="vue1.js"></script>
+  <script src="vue-router.js"></script>
+  <script>
+  /*
+<router-view> 用于渲染匹配的组件，它基于 Vue 的动态组件系统，所以它继承了一个正常动态组件的很多特性。
+<router-view> 中的 HTML 内容会被插入到相应组件的内容插入点（由 content 指定）。
+transition 和 transition-mode 的完整支持。注意：为了场景切换效果能正常工作，路由组件必须不是一个片断实例。
+v-ref 也得到支持；被渲染的组件会注册到父级组件的 this.$ 对象.
+wait-for不支持，应该使用切换钩子函数 activate 控制切换的时机。
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+  <h1>Hello App!</h1>
+  <p>
+    <a v-link="{ name: 'foo', params: { username: 'matisha' }}">Go to Foo</a>
+    <a v-link="{ path: '/bar' }">Go to Bar</a>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+var App = {}
+var router = new VueRouter({
+  hashbang: false,
+  root: '/matisha'
+})
+router.map({
+    '/foo/:username': {
+        name: 'foo',
+        component: {template: '<p>用户名是{{$route.params.username}}</p>'},
+    },
+    '/bar': {
+        component: {template: '<p>jdskdskds</p>'},
+    }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>
