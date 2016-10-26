@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_路由匹配</title>
+  <script src="vue1.js"></script>
+  <script src="vue-router.js"></script>
+  <script>
+    /*
+动态片段：动态片段使用以冒号开头的路径片段定义，例如 user/:username 中，:username 就是动态片段。
+它会匹配注入 /user/foo 或者 /user/bar 之类的路径。当路径匹配一个含有动态片段的路由规则时，动态片段的信息可以从 $route.params 中获得。
+router.map({
+  '/user/:username': {
+    component: {
+      template: '<p>用户名是{{$route.params.username}}</p>'
+    }
+  }
+})
+    */ 
+    /*
+一条路径中可以包含多个动态片段，每个片段都会被解析成 $route.params 的一个键值对。
+模式                             匹配的路径             $route.params
+/user/:username                  /user/evan             { username: 'evan' }
+/user/:username/post/:post_id    /user/evan/post/123    { username: 'evan', post_id: 123 }
+    */
+    /*
+全匹配片段
+动态片段只能匹配路径中的一个部分，而全匹配片段则基本类似于它的贪心版。/foo/*bar 会匹配任何以 /foo/ 开头的路径。匹配的部分也会被解析为 $route.params 中的一个键值对。
+模式                      匹配的路径           $route.params
+/user/*any                 /user/a/b/c          { any: 'a/b/c' }
+/foo/*any/bar             /foo/a/b/bar          { any: 'a/b' }
+    */
+  </script>
+</head>
+<body>
+<div id="app">
+  <h1>Hello App!</h1>
+  <p>
+    <a v-link="{ path: '/foo/matisha' }">Go to Foo</a>
+    <a v-link="{ path: '/bar/matisha/test' }">Go to Bar</a>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+var App = {}
+var router = new VueRouter()
+router.map({
+    '/foo/:username': {
+        component: {template: '<p>用户名是{{$route.params.username}}</p>'},
+    },
+    '/bar/*matisha ': {
+        component: {template: '<p>用户名是{{$route.params|json}}</p>'},
+    }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>

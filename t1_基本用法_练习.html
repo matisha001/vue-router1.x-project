@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_基本用法_练习</title>
+  <script src="vue2.js"></script>
+  <script src="vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+  <p>t1_基本用法</p>
+  <!-- router使用v-link进行导航 -->
+  <a v-link="{path: '/view-a'}">Go to view-a</a>
+  <a v-link="{path: '/view-b'}">Go to view-b</a>
+  <!-- 路由外链 注意路由外链一定要写在vue实例元素标签里面 -->
+  <router-view></router-view>
+</div>
+
+<script>
+    let App = Vue.extend({})//定义路由根组件
+    var ViewA = { 
+      template:"<div>{{ message }}</div>",
+      data: function(){
+       return {message: 'hello'}
+      },
+    }//在vuejs2.x中这种定义组件写法会报错
+    var ViewB = Vue.extend({ 
+      template:"<div>{{ message }}</div>",
+      data: function(){
+       return {message: 'world'}
+      },
+    })
+    var router = new VueRouter();//定义路由
+    router.map({
+      '/view-a': {
+        component: ViewA
+      },
+      '/view-b': {
+        component: ViewB
+      }
+    });
+    router.start(App, '#app');
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_具名路径</title>
+  <script src="vue1.js"></script>
+  <script src="vue-router.js"></script>
+  <script>
+/*
+给一条路径加上一个名字能够让我们更方便地进行路径的跳转。
+router.map({
+  '/user/:userId': {
+    name: 'user', // 给这条路径加上一个名字
+    component: { ... }
+  }
+})
+可以如下用 v-link 链接到该路径：
+<a v-link="{ name: 'user', params: { userId: 123 }}">User</a>
+也可以用 router.go() 来切换到该路径：
+router.go({ name: 'user', params: { userId: 123 }})
+路由都会最终切换到 /user/123。
+*/ 
+  </script>
+</head>
+<body>
+<div id="app">
+  <h1>Hello App!</h1>
+  <p>
+    <a v-link="{ name: 'foo', params: { username: 'matisha' }}">Go to Foo</a>
+    <a v-link="{ path: '/bar/matisha/test' }">Go to Bar</a>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+var App = {}
+var router = new VueRouter()
+router.map({
+    '/foo/:username': {
+        name: 'foo',
+        component: {template: '<p>用户名是{{$route.params.username}}</p>'},
+    },
+    '/bar/*matisha ': {
+        component: {template: '<p>用户名是{{$route.params|json}}</p>'},
+    }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>
