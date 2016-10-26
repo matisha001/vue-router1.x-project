@@ -9,9 +9,6 @@
 ####使用方法：
 - $ git clone git@github.com:matisha001/vue-router1.x-demos.git
 
-####说明
-  '<script src="vue1.js"></script>//'这是vue1.x的版本。
-  '<script src="vue2.js"></script>//'这是vue2.x的版本。
 
 ####
 - 后续还会陆续更新vue-router2.x的使用教程，敬请关注。
