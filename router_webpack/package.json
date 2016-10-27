@@ -1,0 +1,25 @@
+{
+  "name": "router_webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/matisha001/vue-router1.x-demos.git"
+  },
+  "keywords": [
+    "123456"
+  ],
+  "author": "matisha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matisha001/vue-router1.x-demos/issues"
+  },
+  "homepage": "https://github.com/matisha001/vue-router1.x-demos#readme",
+  "devDependencies": {
+    "webpack": "^1.13.2"
+  }
+}

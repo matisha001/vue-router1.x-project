@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_动态组件载入_lazy load</title>
+  <script src="../vue1.js"></script>
+  <script src="../vue-router.js"></script>
+  <script>
+  /*
+在使用 Webpack 或者 Browserify 时，在基于异步组件编写的 Vue 项目时，也可以较为容易的实现惰性加载组件。
+router.map({
+  '/async': {
+    component: function (resolve) {
+      // somehow retrieve your component definition from server...
+      resolve(MyComponent)
+    }
+  }
+})
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+  <h1>Hello App!</h1>
+  <p>
+    <a v-link="{ path: '/async' }">Go to Bar</a>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+var App = {}
+var router = new VueRouter()
+router.map({
+  '/async': {
+    component: function (resolve) {
+      require(['./MyComponent.vue'], resolve)//vue-router在Webpack中使用。
+      /*
+        require(['./MyComponent.vue'], function (MyComponent) {
+          // code here runs after MyComponent.vue is asynchronously loaded.
+        })
+      */
+    }
+  }
+})
+router.start(App, '#app')
+//当 /async 需要被渲染时，MyComponent.vue组件，会自动加载它的依赖组件，并且异步的加载进来。
+</script>
+</body>
+</html>

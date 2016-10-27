@@ -43,6 +43,7 @@ router.map({
         component: {template: '<p>用户名是{{$route.params|json}}</p>'},
     }
 })
+//当路径很长的时候，可以使用具名路径代替路径
 router.start(App, '#app')
 </script>
 </body>

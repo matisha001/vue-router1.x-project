@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_动态组件载入_lazy load</title>
+  <script src="../vue1.js"></script>
+  <script src="../vue-router.js"></script>
+  <script>
+  /*
+使用 Browserify 还需要一些技巧。你可能需要插件 partition-bundle，并且需要在 json 文件中手动声明：
+
+{
+  "main.js": ["./main.js"],
+  "my-component.js": ["./MyComponent.vue"]
+}
+然后在 main.js，你需要做一些类似的操作，用 loadjs 替代 require：
+
+router.map({
+  '/async': {
+    component: function (resolve) {
+      loadjs(['./MyComponent.vue'], resolve)
+    }
+  }
+})
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+  <h1>Hello App!</h1>
+  <p>
+    <a v-link="{ path: '/async' }">Go to Bar</a>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+var App = {}
+var router = new VueRouter()
+router.map({
+  '/async': {
+    component: function (resolve) {
+      require(['./MyComponent.vue'], resolve)//vue-router在Webpack中使用。
+      /*
+        require(['./MyComponent.vue'], function (MyComponent) {
+          // code here runs after MyComponent.vue is asynchronously loaded.
+        })
+      */
+    }
+  }
+})
+router.start(App, '#app')
+//当 /async 需要被渲染时，MyComponent.vue组件，会自动加载它的依赖组件，并且异步的加载进来。
+</script>
+</body>
+</html>
