@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>t1_deactivate_transition</title>
+	<script src="../vue1.js"></script>
+	<script src="../vue-router.js"></script>
+  <script>
+  /*
+调用 transition.next() 可以断定（ resolve ）这个钩子函数。注意，这里调用 transition.abort() 并不会把应用回退到前一个路由状态因为此时切换已经被确认合法了。
+可选择性返回 Promise
+resolve -> transition.next()
+reject(reason) -> transition.abort(reason)
+此钩子函数的调用顺序从下至上。父级组件的 deactivate 会在子级组件的 deactivate 被断定（ resolved ）之后被调用。
+
+新组件的 activate 钩子函数会在所有组件的 deactivate 钩子函数被断定（ resolved ）之后被调用。
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+<!-- 在模板中使用 $loadingRouteData -->
+<div class="view">
+  <div v-if="$loadingRouteData">Loading ...</div>
+  <div v-if="!$loadingRouteData">
+    <user-profile user="{{user}}"></user-profile>
+    <user-post v-for="post in posts"></user-post>
+  </div>
+</div>
+</div>
+<script>
+let App = Vue.extend({})//定义路由根组件
+Vue.component('hook-example', {
+  props:['someProp'],
+  template:'<a v-link="someProp">Go to view{{someProp.path}}</a>',
+  route: {
+    activate: function (transition) {
+      console.log('hook-example activated!')
+      transition.next()
+    },
+    deactivate: function (transition) {
+      console.log('hook-example deactivated!')
+      transition.next()
+    }
+  }
+})
+var Foo = Vue.extend({ 
+    template:"<div>{{ message }}</div>",
+    data: function(){
+     return {message: 'world'}
+    },
+})
+var router = new VueRouter()
+router.map({
+  '/foo': {
+    component: Foo
+  }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>

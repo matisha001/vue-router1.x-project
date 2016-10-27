@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>t1_canReuse_transition</title>
+	<script src="../vue1.js"></script>
+	<script src="../vue-router.js"></script>
+  <script>
+  /*
+决定组件是否可以被重用。如果一个组件不可以重用，当前实例会被一个新的实例替换，这个新实例会经历正常的验证和激活阶段。
+此路由配置参数可以是一个 Boolean 值或者一个返回同步的返回 Boolean 值的函数。默认值为 true .
+transition {Transition}
+在 canReuse 钩子中只能访问 transition.to 和 transition.from 。
+必须返回 Boolean 类型，其他等效的假值（ Falsy values ）会当作 false 对待。
+canReuse 会同步调用，而且从上至下对所有可能重用的组件都会调用。
+
+如果组件可以重用，它的 data 钩子在激活阶段仍然会被调用。
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+<!-- 在模板中使用 $loadingRouteData -->
+<div class="view">
+  <div v-if="$loadingRouteData">Loading ...</div>
+  <div v-if="!$loadingRouteData">
+    <user-profile user="{{user}}"></user-profile>
+    <user-post v-for="post in posts"></user-post>
+  </div>
+</div>
+</div>
+<script>
+let App = Vue.extend({})//定义路由根组件
+Vue.component('hook-example', {
+  props:['someProp'],
+  template:'<a v-link="someProp">Go to view{{someProp.path}}</a>',
+  route: {
+    activate: function (transition) {
+      console.log('hook-example activated!')
+      transition.next()
+    },
+    deactivate: function (transition) {
+      console.log('hook-example deactivated!')
+      transition.next()
+    }
+  }
+})
+var Foo = Vue.extend({ 
+    template:"<div>{{ message }}</div>",
+    data: function(){
+     return {message: 'world'}
+    },
+})
+var router = new VueRouter()
+router.map({
+  '/foo': {
+    component: Foo
+  }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>

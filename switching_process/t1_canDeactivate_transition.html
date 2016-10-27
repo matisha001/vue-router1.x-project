@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>t1_canDeactivate_transition</title>
+	<script src="../vue1.js"></script>
+	<script src="../vue-router.js"></script>
+  <script>
+  /*
+在验证阶段，当一个组件将要被切出的时候被调用。
+调用 transition.next() 可以断定（ resolve ）此钩子函数。调用 transition.abort() 可以无效化并取消此次切换。
+可选择性返回 Promise :
+resolve(true) -> transition.next()
+resolve(false) -> transition.abort()
+reject(reason) -> transition.abort(reason)
+可选择性返回 Boolean 值:
+true -> transition.next()
+false -> transition.abort()
+此钩子函数的调用顺序是从下至上。组件的 canDeactivate 钩子仅在子级组件的 canDeactivate 被断定（ resolved ）之后调用。
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+<!-- 在模板中使用 $loadingRouteData -->
+<div class="view">
+  <div v-if="$loadingRouteData">Loading ...</div>
+  <div v-if="!$loadingRouteData">
+    <user-profile user="{{user}}"></user-profile>
+    <user-post v-for="post in posts"></user-post>
+  </div>
+</div>
+</div>
+<script>
+let App = Vue.extend({})//定义路由根组件
+Vue.component('hook-example', {
+  props:['someProp'],
+  template:'<a v-link="someProp">Go to view{{someProp.path}}</a>',
+  route: {
+    activate: function (transition) {
+      console.log('hook-example activated!')
+      transition.next()
+    },
+    deactivate: function (transition) {
+      console.log('hook-example deactivated!')
+      transition.next()
+    }
+  }
+})
+var Foo = Vue.extend({ 
+    template:"<div>{{ message }}</div>",
+    data: function(){
+     return {message: 'world'}
+    },
+})
+var router = new VueRouter()
+router.map({
+  '/foo': {
+    component: Foo
+  }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>

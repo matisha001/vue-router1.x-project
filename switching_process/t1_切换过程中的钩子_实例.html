@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>t1_切换过程中的钩子_实例</title>
+		<style>
+			img{
+				width: 30%;
+				padding-right: 10px;
+				border-right: 2px solid #000000;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			  <img src="1.png">
+			  <img src="2.png">
+			  <img src="3.png">
+			<div class="row">
+				<div>
+					<div>
+						<a v-link="{ path: '/home', activeClass: 'active'}">请打开控制台进行观察</a>
+					</div>
+				</div>
+				<div>
+					<div>
+						<div>
+							<router-view></router-view>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<template id="home">
+			<div>
+				<ul>
+					<li>
+						<a v-link="{ path: '/home/news'}">News</a>
+					</li>
+					<li>
+						<a v-link="{ path: '/home/message'}">Messages</a>
+					</li>
+				</ul>
+				<router-view></router-view>
+			</div>
+		</template>
+		<template id="news">
+			<div>News 01</div>
+		</template>
+		<template id="message">
+			<div>Message 01</div>
+		</template>
+	</body>
+	<script src="../vue1.js"></script>
+	<script src="../vue-router.js"></script>
+	<script>	
+		function RouteHelper(name) {
+			var route = {
+				canReuse: function(transition) {
+					console.log('组件是否可以被重用' + name + '的钩子函数:canReuse')
+					console.log(transition)//里面只含有transition.to 和 transition.from
+					return true
+				},
+				canActivate: function(transition) {
+					console.log('组件是否可以被激活' + name + '的钩子函数:canActivate')
+					transition.next()
+					//transition.abort()
+					//transition.redirect('/home/news')
+					console.log('transition.to将要切换到的路径的路由对象')
+					console.log(transition.to)
+					console.log('transition.from当前路径的路由对象')
+					console.log(transition.from)
+					console.log('transition.abort调用此函数来终止或者拒绝此次切换。->'+transition.abort)
+					console.log('transition.next调用此函数处理切换过程的下一步->'+transition.next)
+					console.log('transition.redirect取消当前切换并重定向到另一个路由。->'+transition.redirect)
+					console.log(transition)
+				},
+				activate: function(transition) {
+					console.log('激活组件' + name + '的钩子函数:activate')
+					transition.next()
+				},
+				canDeactivate: function(transition) {
+					console.log('组件是否可以被禁用' + name + '的钩子函数:canDeactivate')
+					transition.next()
+				},
+				deactivate: function(transition) {
+					console.log('禁用组件' + name + '的钩子函数:deactivate')
+					transition.next()
+				},
+				data: function(transition) {
+					console.log('data可以设置的组件' + name + '的钩子函数:data')
+					console.log('------------------------------------')
+				}
+			}
+			return route;
+		}
+		
+		var Home = Vue.extend({
+			template: '#home',
+			route: RouteHelper('Home')
+		})
+		var News = Vue.extend({
+			template: '#news',
+			route: RouteHelper('News')
+		})
+
+		var Message = Vue.extend({
+			template: '#message',
+			route: RouteHelper('Message')
+		})
+		var router = new VueRouter()
+		router.redirect({
+			'/': '/home'
+		})
+		router.map({
+			'/home': {
+				component: Home,
+				subRoutes: {
+					'/news': {
+						component: News
+					},
+					'/message': {
+						component: Message
+					}
+				}
+			}
+		})
+
+		router.beforeEach(function(transition) {
+			console.log('在路由切换开始时调用全局函数:beforeEach');
+			console.log(transition)
+			transition.next()//调用此函数处理切换过程的下一步。
+		})
+
+		router.afterEach(function(transition) {
+			console.log('在每次路由切换成功进入激活阶段时被调用全局函数:afterEach');
+		})
+
+		var App = Vue.extend({})
+		router.start(App, '#app')
+	</script>
+
+</html>
