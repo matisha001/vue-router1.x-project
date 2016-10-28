@@ -53,17 +53,30 @@ router.beforeEach(function (transition) {
 </div>
 <script>
 var Foo = Vue.extend({
-    template: '<p>Foo\'s path is -->{{$route.path}}',
+    template: '\
+      <div>\
+        <p>当前路径：{{$route.path}}</p>\
+        <p>当前参数：{{$route.params | json}}</p>\
+        <p>当前router：{{$route.router }}</p>\
+        <p>路由名称：{{$route.name}}</p>\
+        <p>路由查询参数：{{$route.query | json}}</p>\
+        <p>路由匹配项：{{$route.matched | json}}</p>\
+    </div>',
+/*    methods:{
+      test:function(){
+        // console.log(this.$router)
+      }
+    }*/
 })//在模板中使用路由对象的属性
-
 var Bar = {
-    template: '<p>Bar\'s path is -->{{$route.path}}',
+    template: '<p>Bar\'s path-->{{$route.path}}',
 }
 var App = {}
 var router = new VueRouter()
 router.map({
     '/foo': {
         component: Foo,
+        name:'matisha',
         auth: true
     },
     '/bar': {
