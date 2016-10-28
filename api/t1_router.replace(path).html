@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_router.replace(path)</title>
+  <script src="../vue1.js"></script>
+  <script src="../vue-router.js"></script>
+  <script>
+  /*
+和 router.go(path) 类似，但是并不会在浏览器历史创建一条新的纪录。
+path: String
+此路径为一个普通路径（也就是说没有动态片段或者全匹配片段）。路径不能以 / 开头，会以相对于当前路径的方式进行解析。
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+  <p>使用router.replace(path)可以发现浏览器中的前进和后退失效</p>
+  <p>
+      <a v-link="{ path: '/foo' }">Go to Foo</a>
+      <a v-link="{ path: '/bar' }">Go to Bar</a>
+      <button type="button" onclick="replace('/foo')">Go to Foo</button>
+      <button type="button" onclick="replace({path:'/bar'})">Go to Bar</button>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+function replace(path){
+  router.replace(path)
+}
+let App = Vue.extend({})//定义路由根组件
+var Foo = Vue.extend({ 
+    template:"<div><h1>{{ message }}</h1></div>",
+    data: function(){
+     return {message: 'world'}
+    },
+})
+var Bar = {
+    template: '<p>This is bar!</p>'
+}
+var router = new VueRouter()
+
+router.map({
+  '/foo': {
+    component: Foo,
+  },
+  '/bar': {
+    component: Bar
+  }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>

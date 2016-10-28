@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>t1_router.stop()</title>
+	<script src="../vue1.js"></script>
+	<script src="../vue-router.js"></script>
+  <script>
+  /*
+  停止监听 popstate 和 hashchange 事件。
+当路由处于停止状态，router.app 并没有销毁，你依然可以使用 router.go(path) 进行跳转。也可以不使用参数调用 router.start() 来重新启动路由。
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+  <p>
+      <a v-link="{ path: '/foo' }">Go to Foo</a>
+      <a v-link="{ path: '/bar' }">Go to Bar</a>
+      <button type="button" onclick='stop()'>stop</button>
+      <button type="button" onclick='go()'>go</button>
+      <button type="button" onclick='start()'>start</button>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+function stop(){
+  router.stop()
+ //console.log(router);
+}
+function start(){
+  router.start()
+  console.log('router already started.')
+}
+function go(){
+  router.go('/bar/test')
+  console.log('router.go already started.')
+}//
+let App = Vue.extend({
+
+})//定义路由根组件
+var Foo = Vue.extend({ 
+    template:"<div>{{ message }}</div>",
+    data: function(){
+     return {message: 'world'}
+    },
+})
+var Bar = {
+    template: '<p>This is bar!</p>'
+}
+var router = new VueRouter()
+router.map({
+  '/foo': {
+    component: Foo,
+  },
+  '/bar': {
+    component: Bar,
+    subRoutes:{
+      '/test':{
+        component:{template:"<div>matisha</div>"}
+      }
+    }
+  }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>

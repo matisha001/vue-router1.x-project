@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>t1_router.beforeEach(hook)</title>
+  <script src="../vue1.js"></script>
+  <script src="../vue-router.js"></script>
+  <script>
+  /*
+添加一个全局的前置钩子函数，这个函数会在路由切换开始时调用。调用发生在整个切换流水线之前。如果此钩子函数拒绝了切换，整个切换流水线根本就不会启动。
+你可以注册多个全局的前置钩子函数。这些函数会按照注册的顺序被调用。调用是异步的，后一个函数会等待前一个函数完成后才会被调用。
+hook {Function}
+此钩子函数一个类型为切换对象的参数。
+router.beforeEach(function (transition) {
+  if (transition.to.path === '/forbidden') {
+    transition.abort()
+  } else {
+    transition.next()
+  }
+})
+//使用 Promise 和 ES6
+router.beforeEach(function ({ to, next }) {
+  if (to.path === '/auth-required') {
+    // 返回一个断定会 true 或者 false 的 Promise
+    return AuthService.isLoggedIn()
+  } else {
+    next()
+  }
+})
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+  <p>
+      <a v-link="{ path: '/foo' }">Go to Foo</a>
+      <a v-link="{ path: '/bar' }">Go to Bar</a>
+      <button type="button" onclick="replace('/foo')">Go to Foo</button>
+      <button type="button" onclick="replace({path:'/bar'})">Go to Bar</button>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+function replace(path){
+  router.replace(path)
+}
+let App = Vue.extend({})//定义路由根组件
+var Foo = Vue.extend({ 
+    template:"<div><h1>{{ message }}</h1></div>",
+    data: function(){
+     return {message: 'world'}
+    },
+})
+var Bar = {
+    template: '<p>This is bar!</p>'
+}
+var Oerror ={
+   template:"<div>404</div>"
+}
+var router = new VueRouter()
+
+router.map({
+  '/': {
+    component: Foo,
+  },
+  '/bar': {
+    component: Bar
+  },
+  '/others': {
+    component: Oerror
+  }
+})
+router.beforeEach(function (transition) {
+  if (transition.to.path === '/others') {
+    transition.abort()
+  } else {
+    transition.next()
+  }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>

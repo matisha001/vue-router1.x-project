@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>t1_router.on(path, config)</title>
+	<script src="../vue1.js"></script>
+	<script src="../vue-router.js"></script>
+  <script>
+  /*
+添加一条顶级的路由配置。在内部实现时，router.map() 对于接收到的路由映射对象中每个键值对都调用 router.on() 
+path: String,config: Object
+router.on('/user/:userId', {
+  component: {
+    template: '<div>{{$route.params.userId}}</div>'
+  }
+})
+  */
+  </script>
+</head>
+<body>
+<div id="app">
+  <p>使用方法:在地址栏/foo后面添加/others</p>
+  <p>
+      <a v-link="{ path: '/foo' }">Go to Foo</a>
+      <a v-link="{ path: '/bar' }">Go to Bar</a>
+  </p>
+  <router-view></router-view>
+</div>
+<script>
+let App = Vue.extend({})//定义路由根组件
+var Foo = Vue.extend({ 
+    template:"<div><h1>{{ message }}</h1></div>",
+    data: function(){
+     return {message: 'world'}
+    },
+})
+var Bar = {
+    template: '<p>This is bar!</p>'
+}
+var router = new VueRouter()
+
+router.on('/foo/:userId', {
+  component: {
+    template: '<div>{{$route.params.userId}}</div>'
+  }
+})
+
+router.map({
+  '/foo': {
+    component: Foo,
+  },
+  '/bar': {
+    component: Bar
+  }
+})
+router.start(App, '#app')
+</script>
+</body>
+</html>
